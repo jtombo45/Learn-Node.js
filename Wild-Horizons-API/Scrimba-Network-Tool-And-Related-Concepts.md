@@ -1,4 +1,4 @@
-Scrimba Network Tool and Related Cocnepts
+Scrimba Network Tool and Related Concepts
 - client and server
     - client: client is the part of a web app that user interact with directly
         - Browser
