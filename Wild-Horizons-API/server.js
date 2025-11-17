@@ -5,7 +5,13 @@ const PORT = 8000;
 
 // Store the server instance in a variable
 const server = http.createServer((req, res) => {
-  res.end('Hello, Wild Horizons API!'); // This message appears in the browser
+  if (req.url === '/api') {
+    res.writeHead(204); 
+    res.write('This is some data \n');
+    res.write('This is some more data \n');
+    // End the response is required to send the data to the client
+    res.end('Hello, Wild Horizons API!', 'utf-8', () => console.log('Response end') ); // This message appears in the browser
+  }
 });
 
 // Start the server and listen on the specified port
