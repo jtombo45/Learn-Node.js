@@ -83,3 +83,61 @@ HTTP Module
 
     The http module is the basic engine behind web servers in Node. It listens for requests and sends back responses—just like taking and serving orders in a restaurant. Perfect for learning the fundamentals.
 
+The response object
+- Has method which allow us to:
+    - specify content-type
+    - set status codes (200, 400 etc.)
+    - provide content (html, JSON, images)
+
+Request-Response Cycle
+- REQUEST
+    - Method: Get/POST/DELETE/PUT/PATCH/ETC
+    - Request Path: /api, etc
+    - Data: query string/path params
+- HANDLE REQUEST
+    - Filtering data
+    - Throwing an error
+    - Generate a response
+- RESPONSE 
+    - Resource (JSON)
+    - Content-Type (application/json)
+- Visual
+            HTTP request
+    Client ------------------> Server (handles request(s))
+            HTTP response
+           <------------------
+
+API:
+- If scrimba had an api the url wouldnt be scrimba.com
+    - It would be scrimba.com/api
+        - And have endpoint such as such as courses, lessons or etc
+            - ex:
+                - scrimba.com/api/courses
+                - scrimba.com/api/topics
+        - And query strings
+            - ex:
+                - scrimba.com/api?topics=node&price=free
+                    - & is used to add more parameters
+The Request Object
+- Gives us access to the incoming request
+    - The url the client used
+    - The headers
+    - Any data sent
+    - The method (GET, POST, DELETE)
+- This allows us understand what the client want to achieve, what they want to give us, what they want from us in return
+
+
+HTTP
+- HTTP is a text-based protocol. All data transferred between the client and the server must be in the forms of strings.
+
+JSON (JavaScript Object Notation)
+- JSON is a lightweight format for storing and transporting data
+- We use JSON.stringify to convert json object to string
+    - JSON.stringify(data-to-convert>)
+
+Content-Types (actually Mime types)
+- application/json
+- text/html
+- text/css
+- application/javascript
+- image formats
