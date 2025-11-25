@@ -1,5 +1,6 @@
 import http from 'node:http'
 import { getDataFromDB } from './database/db.js'
+import { handleResponse } from './handleResponse.js'
 
 const PORT = 8000
 
@@ -9,39 +10,6 @@ const PORT = 8000
   - status code setting
   - response ending
 */
-
-function statusCodeToErrorMessage(statusCode) {
-  const statusMessages = {
-    400: 'Bad Request', 
-    401: 'Unauthorized',
-    403: 'Forbidden',
-    404: 'Not Found', 
-    500: 'Internal Server Error'
-  }
-  return statusMessages[statusCode] || 'Unknown Error'
-}
-
-function handleResponse(
-  res, 
-  {
-    statusCode = 200, 
-    data = null, 
-    contentType = 'application/json', 
-    isError = false,
-    message = ''
-  }) 
-  {
-  res.setHeader('Content-Type', contentType)
-  res.statusCode = statusCode
-  if (isError) {
-    res.end(JSON.stringify({
-      error: statusCodeToErrorMessage(statusCode),
-      message: message
-    }))
-  } else {
-    res.end(JSON.stringify(data))
-  }
-}
 
 /* Create server and define routes */
 const server = http.createServer(async (req, res) => {
@@ -79,4 +47,3 @@ const server = http.createServer(async (req, res) => {
 
 // Start the server
 server.listen(PORT, () => console.log(`Connected on port: ${PORT}`))
-
