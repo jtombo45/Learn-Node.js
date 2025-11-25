@@ -21,7 +21,16 @@ function statusCodeToErrorMessage(statusCode) {
   return statusMessages[statusCode] || 'Unknown Error'
 }
 
-function handleResponse(res, statusCode, contentType = 'application/json', data, isError = false, message = '') {
+function handleResponse(
+  res, 
+  {
+    statusCode = 200, 
+    data = null, 
+    contentType = 'application/json', 
+    isError = false,
+    message = ''
+  }) 
+  {
   res.setHeader('Content-Type', contentType)
   res.statusCode = statusCode
   if (isError) {
@@ -45,7 +54,7 @@ const server = http.createServer(async (req, res) => {
 
   // Route: GET /api
   if (req.url === '/api' && req.method === 'GET') {
-    handleResponse(res, 200, destinations)
+    handleResponse(res,{statusCode: 200, data: destinations})
   } 
   // Route: GET /api/continent/:continent
   else if (req.url.startsWith('/api/continent/') && req.method === 'GET') {
@@ -60,14 +69,14 @@ const server = http.createServer(async (req, res) => {
         return detination.continent.toLowerCase() === continent.toLowerCase()
       })
       
-      handleResponse(res, 200, filteredDestinations)
+      handleResponse(res, {statusCode: 200, data: filteredDestinations, })
     } 
     // Route: error response 
     else {
-      handleResponse(res, 404, null, true, 'The requested route does not exist'
-    )
-  }
+      handleResponse(res, {statusCode: 404, isError: true, message: 'The requested route does not exist'})
+    }
 })
 
+// Start the server
 server.listen(PORT, () => console.log(`Connected on port: ${PORT}`))
 
