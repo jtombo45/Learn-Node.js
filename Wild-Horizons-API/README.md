@@ -141,3 +141,48 @@ Content-Types (actually Mime types)
 - text/css
 - application/javascript
 - image formats
+
+Route Note Found
+```
+else {
+      console.log('invalid route')
+      res.setHeader('Content-Type', 'application/json')
+      res.statusCode = 404
+      res.end(JSON.stringify({
+        error: 'not found',
+        message: 'The requested route does not exist'
+      }))
+```
+
+Calling our endpoint
+- Start the server
+    - cd <targerFolder>
+    - node server.js
+- Call the endpoint
+    - open new terminal
+    - make the api call
+        - CURL option
+            - curl http://localhost:<serverPort>/api
+        - POSTMAN
+            - tbd
+        - Browser
+            - tbd
+
+Add Path Parameters
+- Allow user filter data by content
+- e.g:
+    - /api/continent/spain
+- code:
+```
+else if (req.url.startsWith('/api/continent/') && req.method === 'GET') {
+      const continent = req.url.split('/').pop() // Get the continent from the URL
+      console.log(continent)
+      const filteredDestinations = destinations.filter((detination) => {
+        return detination.continent.toLowerCase() === continent.toLowerCase()
+      })
+      res.setHeader('Content-Type', 'application/json')
+      res.statusCode = 200
+      res.end(JSON.stringify(filteredDestinations))
+    } 
+```
+
