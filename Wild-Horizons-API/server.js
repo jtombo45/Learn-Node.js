@@ -3,15 +3,10 @@ import { getDataFromDB } from './database/db.js'
 import { handleResponse } from './utils/sendJSONResponse.js'
 import { url } from 'node:inspector'
 import { applyFilters } from './utils/applyFilters.js'
+import { validateQueryParameters } from './utils/validateQueryParameters.js'
 
+// Defining server port
 const PORT = 8000
-
-/* Repetitive code:
-  - request url and method checking
-  - response header setting
-  - status code setting
-  - response ending
-*/
 
 /* Create server and define routes */
 const server = http.createServer(async (req, res) => {
@@ -23,9 +18,18 @@ const server = http.createServer(async (req, res) => {
   const urlObj = new URL(req.url, `http://${req.headers.host}`)
   const queryObj = Object.fromEntries(urlObj.searchParams)
 
+  // Validating query parameters
+  const invalidKey = validateQueryParameters(queryObj)
+  if(invalidKey){
+    return handleResponse(res, {
+      statusCode: 400,
+      isError: true,
+      message: `Invalid filter key: "${invalidKey}".`
+    })
+  }
+
   // Fetch data from the database
   const destinations = await getDataFromDB()
-  const filteredDestinations = null;
 
   // Route: GET /api
   if (urlObj.pathname === '/api' && req.method === 'GET') {
