@@ -312,6 +312,23 @@ else if (req.url.startsWith('/api/continent/') && req.method === 'GET') {
   handleResponse(res, { statusCode: 200, data: filtered });
 }
 
+⸻
+
+🧳 Util Query Parameters Update
+export const getDataByQueryParams = (data, queryObj) => {
+
+  const { continent, country, is_open_to_public } = queryObj
+
+  if (continent) {
+    data = data.filter(destination =>
+      destination.continent.toLowerCase() === continent.toLowerCase()
+    )
+  }
+  .
+  .
+  .
+  return data
+} 
 
 ⸻
 
@@ -327,3 +344,5 @@ By building this project, you’ve learned:
 	•	how to read Node.js docs effectively
 
 This is solid foundational knowledge that makes learning Express, Fastify, or even backend frameworks in other languages MUCH easier.
+
+

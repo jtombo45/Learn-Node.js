@@ -16,7 +16,7 @@ export const getDataByQueryParams = (data, queryObj) => {
 
   if (is_open_to_public) {
     data = data.filter(destination =>
-      destination.is_open_to_public === JSON.parse(is_open_to_public).toLowerCase()
+      destination.is_open_to_public === JSON.parse(is_open_to_public)
     )
   }
 
