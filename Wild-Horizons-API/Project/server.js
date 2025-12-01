@@ -14,16 +14,29 @@ Challenge:
 */
 
 import http from 'node:http'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { relativePathFunc, absolutePathFunc } from './utils/testPath.js'
 
 const PORT = 8000
 
-const server = http.createServer((req, res) => {
+const __dirname = import.meta.dirname
+
+
+const server = http.createServer((req, res)=> {
+
+  const absPathToResource =  path.join(__dirname, 'public', 'index.html')
+  const relativePath = path.relative(process.cwd(), absPathToResource)
+  console.log('absolute path to resource:', absPathToResource)
+  console.log('relative path to resource:', relativePath)
+
+  absolutePathFunc(__dirname)
+  relativePathFunc(__dirname)
+
+  res.statusCode = 200
   res.setHeader('Content-Type', 'text/html')
-  res.writeHead(200)
-  let responseMessage = '<html><h1>The server is working</h1></html>'
-    res.end(responseMessage)
+  res.end()
 })
 
-server.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`)
-})
+server.listen(PORT, () => console.log('connected on port 8000'))
+
