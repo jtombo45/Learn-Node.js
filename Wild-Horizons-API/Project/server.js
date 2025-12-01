@@ -1,42 +1,28 @@
-/*
-Challenge: 
-
-1.Set up a server that serves the string 
-    '<html><h1>The server is working</h1></html>'.
-    
-    What should the content type be? 
-    What status code should you send?
-
-2. Listen on port 8000 and log a connection message to the console.
-
-3. Open the browser to see your first served HTML.
-
-*/
-
 import http from 'node:http'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-import { relativePathFunc, absolutePathFunc } from './utils/testPath.js'
+import { serveStatic } from './utils/serveStatic.js'
 
 const PORT = 8000
 
+/*
+Challenge 1:
+
+1. Get the name of the directory holding this server.js file and store it to a const ‘__dirname’.
+*/
 const __dirname = import.meta.dirname
 
 
-const server = http.createServer((req, res)=> {
+const server = http.createServer((req, res) => {
 
-  const absPathToResource =  path.join(__dirname, 'public', 'index.html')
-  const relativePath = path.relative(process.cwd(), absPathToResource)
-  console.log('absolute path to resource:', absPathToResource)
-  console.log('relative path to resource:', relativePath)
+    /*
+    Challenge 3:
 
-  absolutePathFunc(__dirname)
-  relativePathFunc(__dirname)
+    1. Import and call serveStatic and pass it the directory of this current module.
+    */
+    serveStatic(__dirname)
 
-  res.statusCode = 200
-  res.setHeader('Content-Type', 'text/html')
-  res.end()
+    res.statusCode = 200
+    res.setHeader('Content-Type', 'text/html')
+    res.end('<html><h1>The server is working</h1></html>')
 })
 
-server.listen(PORT, () => console.log('connected on port 8000'))
-
+server.listen(PORT, ()=> console.log(`Connected on port: ${PORT}`))
