@@ -140,4 +140,52 @@ const server = http.createServer(async (req, res) => {
 server.listen(PORT, () => console.log('connected on port 8000'))
 ```
 
+Key Differences Summarized:
+Feature
+CommonJS (CJS)
+ES Modules (ESM)
+Import/Export
+require() / module.exports
+import / export
+Loading
+Synchronous
+Asynchronous
+Dynamic Imports
+require() as function
+import() as function
+Environment
+Node.js (primary)
+Browser & Node.js (native)
+Tree-shaking
+Not natively supported
+Supported
+Top-level await
+Not supported
+Supported
+Conclusion:
+While CommonJS remains relevant for legacy Node.js projects, ES Modules are the modern standard for JavaScript development due to their native browser support, optimization capabilities (like tree-shaking), and standardization within the language. Understanding both systems allows developers to choose the appropriate module system based on project requirements and target environments.
 
+Global vars in node
+```
+/* commonJS */
+
+// console.log(__dirname)
+// console.log(__filename)
+
+/* ES Modules before v20 */
+
+import path from 'node:path'
+import url from 'node:url'
+
+const __filename = url.fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+console.log(__filename)
+console.log(__dirname)
+
+
+/* ES Modules using import.meta v20+ */
+
+// console.log(import.meta.dirname)
+// console.log(import.meta.filename)
+```

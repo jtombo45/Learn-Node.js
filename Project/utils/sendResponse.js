@@ -5,8 +5,8 @@ Challenge 2:
   What 4 things should this function take in as parameters?
 
 */
-export function sendResponse(res, statusCode, contentType, content) {
+export function sendResponse(res, statusCode, contentType, payload) {
   res.statusCode = statusCode
   res.setHeader('Content-Type', contentType)
-  res.end(content)
+  res.end(payload)
 }
