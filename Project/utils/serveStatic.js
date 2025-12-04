@@ -1,35 +1,51 @@
 import path from 'node:path'
 import fs from 'node:fs/promises'
 import { sendResponse } from './sendResponse.js'
+import { getContentType } from './getContentType.js'
 
-export async function serveStatic(__dirname, res) {
-   /*
-   Challenge 1: 
+export async function serveStatic(req, res, baseDir) {
+  /*
+Challenge: 
+  1. Write code below to serve files from our public directory.
+     
+     Don’t worry about handling errors for now.
+     hint.md for help!
+*/
+  try { 
 
-   - Store index.html as a buffer in a const ‘content’. 
-   - As this is an async process, do this inside a try/catch block.
-   - For now, just log the error in the catch block.
-   - You will need to change something to do with the function declaration. What is it?
+   // 1. Decide which file to serve
+  let filePath = path.join(baseDir, 'public', req.url === '/' ? 'index.html' : req.url) // change index.html to index2.html to trigger 404
 
-   */
-   /*
-   Challenge 3:
+   // 2. Read the file content
+    const content = await fs.readFile(filePath)
+    //doesNotExistFunctionCall() // to trigger 500 error
 
-   - Import sendResponse() and use it to serve index.html. 
-   Pass in all of the information sendResponse() is expecting.
-   serveStatic() will need another param. What is it?
+    // 3. Figure out the MIME type (content type)
+    const ext = path.extname(filePath)
+    const contentType = getContentType(ext)
 
-   Make any changes necessary in server.js and delete any unneeded code.
+    // 4. Send the result
+    sendResponse(res, 200, contentType, content)
 
-   */
-   try{
-      const filePath = path.join(__dirname, 'public', 'index.html')
-      const content = await fs.readFile(filePath)
-      sendResponse(res, 200, 'text/html', content)
-   }
-   catch(err){
-      console.error(err)
-      sendResponse(res, 500, 'text/plain', 'Internal Server Error')
-   }
+  } catch (err) {
+    // 5. If error code is ENOENT -> send 404.html
+    if(err.code === 'ENOENT') {
+      // Read 404.html
+      const notFoundPath = path.join(baseDir, 'public', '404.html')
+      const notFoundContent = await fs.readFile(notFoundPath)
+
+      // Get content type for 404.html
+      const ext = path.extname(notFoundPath)
+      const contentType = getContentType(ext)
+
+      // Send 404 response
+      sendResponse(res, 404, contentType, notFoundContent)
+    }
+    else{
+      sendResponse(res, 500, 'text/html', `<html><h1>Server Error: ${err.code}</h1></html>`)
+    }
+
+    
+  }
 
 }

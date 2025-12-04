@@ -1,30 +1,21 @@
-import path from 'node:path'
 import http from 'node:http'
-import fs from 'node:fs/promises'
-import { getContentType } from './utils/getContentType.js'
+import { serveStatic } from './utils/serveStatic.js'
+import { getData } from './utils/getData.js'
 
+// 1. Port used by the server
 const PORT = 8000
 
+// 2. Get current directory of the this file (like __dirname in CommonJS)
 const __dirname = import.meta.dirname 
 
+// Test getData()
+console.log('Data from getData():', await getData(__dirname))
+
+// 3. Create the HTTP server
 const server = http.createServer(async (req, res) => {
-
-  const publicDir = path.join(__dirname, 'public')
-  const pathToResource = path.join(
-    publicDir, 
-    req.url === '/' ? 'index.html' : req.url)
-
-  const content = await fs.readFile(pathToResource)
-
-  const ext = path.extname(pathToResource)
-  //console.log(ext)
-
-  const contentType = getContentType(ext)
-
-  res.statusCode = 200  
-  res.setHeader('Content-Type', contentType)
-  res.end(content)
- 
+    // For *every* request, delegate to serveStatic()
+    await serveStatic(req, res, __dirname)
 })
 
-server.listen(PORT, () => console.log('connected on port 8000'))
+// 4. Start listening
+server.listen(PORT, () => console.log(`connected on port ${PORT}`))
