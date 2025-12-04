@@ -14,6 +14,7 @@ export async function getData(baseDir) {
 
     hint.md for help
     */
+   // We use JSON array to allow for better data handling later on
     try{
         const dataPath = path.join(baseDir, 'data', 'data.json')
         const jsonData = await fs.readFile(dataPath, 'utf-8')
