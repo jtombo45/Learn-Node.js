@@ -15,11 +15,12 @@ export async function getData(baseDir) {
     hint.md for help
     */
     try{
-    const dataPath = path.join(baseDir, 'data', 'data.json')
-    const jsonData = await fs.readFile(dataPath, 'utf-8')
-    return JSON.parse(jsonData)
+        const dataPath = path.join(baseDir, 'data', 'data.json')
+        const jsonData = await fs.readFile(dataPath, 'utf-8')
+        return JSON.parse(jsonData)
     }
     catch(err){
+        console.error('Error reading or parsing data.json:', err)
         return []   
     }
 
