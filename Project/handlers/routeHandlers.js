@@ -13,6 +13,7 @@ import { getData } from '../utils/getData.js'
 import { sendResponse } from '../utils/sendResponse.js'
 import { parseJSONBody } from '../utils/parseJSONBody.js'
 import { addNewSighting } from '../utils/addNewSighting.js'
+import sanitizeHtml from 'sanitize-html'
 
 export async function handleGet(res) {
   const data = await getData()
@@ -42,9 +43,23 @@ Challenge:
 */
 export async function handlePost(req, res) {
     try{
+        // Log the receipt of the POST request
         console.log('POST request received')
+
+        // Parse the JSON body
         const parsedBody = await parseJSONBody(req)
+
+        // Sanitize inputs
+        parsedBody.location = sanitizeHtml(parsedBody.location, {allowedTags: ['b']}) // Allow <b> tags only]})
+        parsedBody.title = sanitizeHtml(parsedBody.title, {allowedTags: ['b']}) // Allow <b> tags only]})  
+        parsedBody.text = sanitizeHtml(parsedBody.text, {allowedTags: ['b']}) // Allow <b> tags only]})
+
+        // Log the sanitized parsed body
+        console.log('Parsed Body:', parsedBody);
+
+        // Now add the new sighting
         await addNewSighting(parsedBody)
+
         // 201 is used for successful resource creation
         sendResponse(res, 201, 'application/json', JSON.stringify({ message: 'Data received', data: parsedBody }));
     }

@@ -2,7 +2,6 @@ import { getData } from './getData.js'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { sortObjectKeysRecursively } from './sortObjectKeysRecursively.js'
-import sanitizeHtml from 'sanitize-html'
 import crypto from 'node:crypto'
 
 export async function addNewSighting(newSighting) {
@@ -24,12 +23,8 @@ export async function addNewSighting(newSighting) {
     
     Bonus: figure out how to prettify the JSON!
 */
+    // Assign a unique UUID to the new sighting
     newSighting.uuid = crypto.randomUUID()
-
-    // Sanitize inputs
-    newSighting.location = sanitizeHtml(newSighting.location, {allowedTags: ['b']}) // Allow <b> tags only]})
-    newSighting.title = sanitizeHtml(newSighting.title, {allowedTags: ['b']}) // Allow <b> tags only]})  
-    newSighting.text = sanitizeHtml(newSighting.text, {allowedTags: ['b']}) // Allow <b> tags only]})
 
     // Logging for debugging purposes
     console.log(typeof newSighting)
