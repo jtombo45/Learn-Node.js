@@ -1,4 +1,9 @@
-function addNewSighting(newSighting) {
+import { getData } from './getData.js'
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import { sortObjectKeysRecursively } from './sortObjectKeysRecursively.js'
+
+export async function addNewSighting(newSighting) {
 
   try {
 /*
@@ -17,8 +22,17 @@ function addNewSighting(newSighting) {
     
     Bonus: figure out how to prettify the JSON!
 */
+    newSighting.uuid = crypto.randomUUID()
+    console.log(typeof newSighting)
+    console.log('New sighting:', newSighting)
+    const data = await getData()
+    data.push(newSighting)
+    const dataPath = path.join('data', 'data.json')
+    // await fs.writeFile(dataPath, JSON.stringify(await sortObjectKeysRecursively(data), null, 2), 'utf-8')
+    await fs.writeFile(dataPath, JSON.stringify(await data, null, 2), 'utf-8')
+    
   } catch (err) {
-
+    throw new Error('Error adding new sighting: ' + err.message)
   }
 
 }

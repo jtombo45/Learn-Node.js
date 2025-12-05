@@ -35,8 +35,8 @@ form.addEventListener("submit", async function (event) {
   const formData = {
     location: location,
     timeStamp: readableDate,
-    text: text,
     title: title,
+    text: text,
   }
 
   try {
