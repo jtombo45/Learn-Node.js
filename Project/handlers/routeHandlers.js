@@ -13,7 +13,7 @@ import { getData } from '../utils/getData.js'
 import { sendResponse } from '../utils/sendResponse.js'
 import { parseJSONBody } from '../utils/parseJSONBody.js'
 import { addNewSighting } from '../utils/addNewSighting.js'
-import sanitizeHtml from 'sanitize-html'
+import { sanitizeInput } from '../utils/sanitizeInput.js' 
 
 export async function handleGet(res) {
   const data = await getData()
@@ -50,18 +50,21 @@ export async function handlePost(req, res) {
         const parsedBody = await parseJSONBody(req)
 
         // Sanitize inputs
+        const sanitizedBody = sanitizeInput(parsedBody)
+        /* old way: too repetitive
         parsedBody.location = sanitizeHtml(parsedBody.location, {allowedTags: ['b']}) // Allow <b> tags only]})
         parsedBody.title = sanitizeHtml(parsedBody.title, {allowedTags: ['b']}) // Allow <b> tags only]})  
         parsedBody.text = sanitizeHtml(parsedBody.text, {allowedTags: ['b']}) // Allow <b> tags only]})
+        */
 
         // Log the sanitized parsed body
-        console.log('Parsed Body:', parsedBody);
+        console.log('Parsed Body:', sanitizedBody);
 
         // Now add the new sighting
-        await addNewSighting(parsedBody)
+        await addNewSighting(sanitizedBody)
 
         // 201 is used for successful resource creation
-        sendResponse(res, 201, 'application/json', JSON.stringify({ message: 'Data received', data: parsedBody }));
+        sendResponse(res, 201, 'application/json', JSON.stringify({ message: 'Data received', data: sanitizedBody }));
     }
     catch(err){
         console.error('Error handling POST request:', err);
