@@ -198,5 +198,14 @@ Adding POST functionality
 - Add the new data to the existing data
 - Write the completed data to the JSON file
 
+XSS Attacks
+- An XSS (Cross-Site Scripting) attack is a security vulnerability that allows an attacker to inject malicious scripts into web pages
+- If user adds malicious javascript wrapped in html we would follow victim to it
+
+Santization
+- Santization is removing anything suspiciious from incoming input. In this case, we will be removing any tags from user-uploaded text
+- We will use santize-html
+  - npm install santize-html
+
 
 

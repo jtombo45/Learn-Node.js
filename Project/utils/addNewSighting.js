@@ -2,6 +2,8 @@ import { getData } from './getData.js'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { sortObjectKeysRecursively } from './sortObjectKeysRecursively.js'
+import sanitizeHtml from 'sanitize-html'
+import crypto from 'node:crypto'
 
 export async function addNewSighting(newSighting) {
 
@@ -23,13 +25,24 @@ export async function addNewSighting(newSighting) {
     Bonus: figure out how to prettify the JSON!
 */
     newSighting.uuid = crypto.randomUUID()
+
+    // Sanitize inputs
+    newSighting.location = sanitizeHtml(newSighting.location, {allowedTags: ['b']}) // Allow <b> tags only]})
+    newSighting.title = sanitizeHtml(newSighting.title, {allowedTags: ['b']}) // Allow <b> tags only]})  
+    newSighting.text = sanitizeHtml(newSighting.text, {allowedTags: ['b']}) // Allow <b> tags only]})
+
+    // Logging for debugging purposes
     console.log(typeof newSighting)
     console.log('New sighting:', newSighting)
-    const data = await getData()
-    data.push(newSighting)
+
+    // Get existing sightings, add the new one, and write back to file
+    const sightings = await getData()
+    sightings.push(newSighting)
+
+    // Write updated sightings back to the JSON file
     const dataPath = path.join('data', 'data.json')
     // await fs.writeFile(dataPath, JSON.stringify(await sortObjectKeysRecursively(data), null, 2), 'utf-8')
-    await fs.writeFile(dataPath, JSON.stringify(await data, null, 2), 'utf-8')
+    await fs.writeFile(dataPath, JSON.stringify(await sightings, null, 2), 'utf-8') // Prettify with 2 spaces indentation
     
   } catch (err) {
     throw new Error('Error adding new sighting: ' + err.message)
