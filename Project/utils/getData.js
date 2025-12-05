@@ -1,7 +1,7 @@
 import path from 'node:path'
 import fs from 'node:fs/promises'
 
-export async function getData(baseDir) {
+export async function getData() {
 
     /*
     Challenge:
@@ -16,9 +16,10 @@ export async function getData(baseDir) {
     */
    // We use JSON array to allow for better data handling later on
     try{
-        const dataPath = path.join(baseDir, 'data', 'data.json')
-        const jsonData = await fs.readFile(dataPath, 'utf-8')
-        return JSON.parse(jsonData)
+        const pathJSON = path.join('data', 'data.json')
+        const data = await fs.readFile(pathJSON, 'utf-8')
+        const parsedData = JSON.parse(data)
+        return parsedData
     }
     catch(err){
         console.error('Error reading or parsing data.json:', err)

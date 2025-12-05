@@ -189,3 +189,14 @@ console.log(__dirname)
 // console.log(import.meta.dirname)
 // console.log(import.meta.filename)
 ```
+
+Adding POST functionality
+- Collect the incoming data
+- Parse it
+- Sanitize it
+- Get our existing data
+- Add the new data to the existing data
+- Write the completed data to the JSON file
+
+
+
